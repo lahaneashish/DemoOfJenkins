@@ -22,11 +22,14 @@ pipeline {
 
         stage('Push to Docker Hub') {
             steps {
-                withDockerRegistry([credentialsId: 'dockerhub-cred', url: '']) {
-                    sh 'docker push $DOCKER_IMAGE:latest'
-                }
-            }
-        }
+               stage('Push to Docker Hub') {
+                   steps {
+                       withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                           sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                           sh 'docker push $DOCKER_IMAGE:latest'
+                       }
+                   }
+               }
 
         stage('Deploy to Kubernetes') {
             steps {
