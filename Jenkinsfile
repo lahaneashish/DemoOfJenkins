@@ -20,12 +20,6 @@ pipeline {
             }
         }
 
-        stage('Load Image to Minikube') {
-            steps {
-                sh 'minikube image load $DOCKER_IMAGE:latest'
-            }
-        }
-
         stage('Deploy to Kubernetes') {
             steps {
                 sh 'kubectl apply -f deployment.yml'
