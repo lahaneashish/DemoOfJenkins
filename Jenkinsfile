@@ -20,12 +20,9 @@ pipeline {
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Load Image to Minikube') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
-                    sh 'docker push $DOCKER_IMAGE:latest'
-                }
+                sh 'minikube image load $DOCKER_IMAGE:latest'
             }
         }
 

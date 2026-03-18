@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: springboot-container
-          image: hello-word
+          image: lahane1234/hello-word:latest   # ✅ FIXED
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
