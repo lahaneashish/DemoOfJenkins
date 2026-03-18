@@ -2,33 +2,29 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "your-dockerhub-username/hello-word"
+        DOCKER_IMAGE = "lahaneashish/hello-word"
     }
 
     stages {
 
-        stage('Clone Code') {
-            steps {
-                git 'https://github.com/YOUR-USERNAME/YOUR-REPO.git'
-            }
-        }
-
         stage('Build JAR') {
             steps {
-                sh 'mvn clean package'
+                sh 'chmod +x mvnw'
+                sh './mvnw clean package'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE .'
+                sh 'docker build -t $DOCKER_IMAGE:latest .'
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                echo "Skipping push for now"
-                // later we will add credentials
+                withDockerRegistry([credentialsId: 'dockerhub-cred', url: '']) {
+                    sh 'docker push $DOCKER_IMAGE:latest'
+                }
             }
         }
 
